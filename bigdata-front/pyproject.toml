@@ -1,0 +1,11 @@
+[project]
+name = "bigdata-front"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.14"
+dependencies = [
+    "black>=26.3.1",
+    "kaleido>=1.2.0",
+    "pandas>=3.0.1",
+    "plotly>=6.6.0",
+]
