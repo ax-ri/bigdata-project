@@ -9,9 +9,9 @@ for dir in ./*; do
     if [ -d "$dir" ]; then
         b=$(basename "$dir")
         mv "$dir/"*.csv "$b.csv"
+        rm -r "$dir"
     fi
 done
-find -type d -exec rm -r '{}' \;
 cd ../..
 
 cd bigdata-front
