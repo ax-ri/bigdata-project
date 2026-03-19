@@ -22,7 +22,6 @@ public class CsvToParquet {
         // Read the CSV file into a Data Frame
         Dataset<Row> csvDs = spark.read()
                 .option("header", "true") // keep CSV header for field names
-                .option("inferSchema", "true")
                 .option("quote", "\"") // needed for proper escape handling (quotes and commas inside a value)
                 .option("escape", "\"") // same as above
                 .csv(inputName);
@@ -31,13 +30,12 @@ public class CsvToParquet {
         System.out.println("[info] The dataframe has " + csvDs.count() + " rows.");
 
         // Write the Data Frame as Parquet
-        csvDs.to(csvDs.schema()).write().mode("overwrite").parquet(outputName);
+        csvDs.write().mode("overwrite").parquet(outputName);
 
         System.out.println("[info] Successfully written Parquet File to " + outputName);
 
         // Reads a Parquet back into Data Frame to ensure the file is valid
         Dataset<Row> parquetDs = spark.read()
-                .option("inferSchema", "true")
                 .parquet(outputName);
         parquetDs.show(5);
         parquetDs.printSchema();
