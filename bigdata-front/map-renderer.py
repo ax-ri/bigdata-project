@@ -73,18 +73,20 @@ def render_dir(input_path: str, output_path: str) -> None:
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     if len(sys.argv) < 2:
         print("usage: map-renderer.py <input path> <output path> [--clean]")
         exit(1)
     input_path, output_path = sys.argv[1], sys.argv[2]
     if len(sys.argv) >= 4:
         try:
+            logging.info("Cleaning old output dir")
             shutil.rmtree(output_path)
             os.mkdir(output_path)
+            logging.info("Output dir cleaned")
         except FileNotFoundError:
             logging.warning("Cannot delete output directory")
             pass
         except Exception as e:
             logging.error("Error with output directory: %s", e)
-    logging.basicConfig(level=logging.INFO)
     render_dir(input_path, output_path)
