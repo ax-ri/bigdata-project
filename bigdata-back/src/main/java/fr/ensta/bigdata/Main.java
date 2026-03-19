@@ -30,13 +30,14 @@ public final class Main {
         CriteriaAggregator agg = new CriteriaAggregator(spark, inputParquetPath);
         CountryJoiner joiner = new CountryJoiner(spark, countryCsvPath);
 
-        for (String criteria : new String[]{"af_danceability", "af_tempo", "af_speechiness"}) {
+        for (String criteria : new String[]{"duration_ms", "af_danceability", "af_energy", "af_key", "af_loudness", "af_speechiness", "af_acousticness", "af_liveness", "af_valence", "af_tempo"}) {
             for (int year = 2017; year <= 2021; year++) {
-                Dataset<Row> ds = agg.aggregate(criteria, year);
+                Dataset<Row> ds = agg.aggregate(criteria, year, 10);
                 ds = joiner.join(ds, "region");
                 writeDatasetAsCsv(ds, Path.of(outputDir, criteria + "-" + year).toString());
             }
         }
+
         spark.stop();
     }
 }
