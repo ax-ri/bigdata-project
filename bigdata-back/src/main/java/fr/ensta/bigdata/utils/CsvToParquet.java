@@ -4,6 +4,8 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
+import static org.apache.spark.sql.functions.col;
+
 /**
  * Utility class to convert a file from CSV to Parquet.
  */
@@ -17,6 +19,7 @@ public class CsvToParquet {
                 .appName("CSV To Parquet")
                 .master("local")
                 .config("spark.sql.parquet.int96RebaseModeInWrite", "CORRECTED")
+                .config("spark.sql.parquet.datetimeRebaseModeInWrite", "CORRECTED")
                 .getOrCreate();
 
         // Read the CSV file into a Data Frame
@@ -29,8 +32,44 @@ public class CsvToParquet {
         csvDs.show(5);
         System.out.println("[info] The dataframe has " + csvDs.count() + " rows.");
 
-        // Write the Data Frame as Parquet
-        csvDs.write().mode("overwrite").parquet(outputName);
+        // Manually specify schema and write the Data Frame as Parquet
+        csvDs.select(
+                        col("id").cast("long"),
+                        col("title").cast("string"),
+                        col("rank").cast("long"),
+                        col("date").cast("date"),
+                        col("artist").cast("string"),
+                        col("url").cast("string"),
+                        col("region").cast("string"),
+                        col("chart").cast("string"),
+                        col("trend").cast("string"),
+                        col("streams").cast("long"),
+                        col("track_id").cast("string"),
+                        col("album").cast("string"),
+                        col("popularity").cast("double"),
+                        col("duration_ms").cast("double"),
+                        col("explicit").cast("boolean"),
+                        col("release_date").cast("date"),
+                        col("available_markets").cast("string"),
+                        col("af_danceability").cast("double"),
+                        col("af_energy").cast("double"),
+                        col("af_key").cast("double"),
+                        col("af_loudness").cast("double"),
+                        col("af_mode").cast("boolean"),
+                        col("af_speechiness").cast("double"),
+                        col("af_acousticness").cast("double"),
+                        col("af_instrumentalness").cast("double"),
+                        col("af_liveness").cast("double"),
+                        col("af_valence").cast("double"),
+                        col("af_tempo").cast("double"),
+                        col("af_time_signature").cast("double")
+                )
+                // convert null values to 0
+                .na().fill(0)
+                // write data in parquet format
+                .write()
+                .mode("overwrite")
+                .parquet(outputName);
 
         System.out.println("[info] Successfully written Parquet File to " + outputName);
 
