@@ -12,6 +12,8 @@ for dir in ./*; do
         rm -r "$dir"
     fi
 done
+mkdir success
+mv success-*.csv success/
 cd ../..
 
 cd bigdata-front
