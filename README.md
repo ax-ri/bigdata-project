@@ -81,6 +81,21 @@ An extract of the dataset is presented in the table below (some columns are omit
 
 <!-- pipeline description, tools used, architecture choices. -->
 
+This project is split into two different parts:
+- a _data processing_ part, that ingest, clean and do the computations to answer the questions;
+- a _data visualization_ part, that produces visual reports based on the computation outputted by the previous part.
+
+These parts are respectively nicknamed _back_ and _font_ (like the back-end and front-end of a Web application).
+
+### Data processing ([`back`](./bigdata-back/))
+
+This part is written in Java, using the Spark framework. It handles:
+- the conversion of the dataset from `CSV` to `Parquet`;
+- the various computations needed to answer the questions.
+
+### Data visualization ([`front`](./bigdata-front/))
+
+This part is written in Python (because of its rich ecosystem of visualization modules), and produces maps and charts to create a visual representation of the answers.
 
 ## Results
 
