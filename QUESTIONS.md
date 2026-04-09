@@ -20,7 +20,7 @@ The following table illustrates the advantages of `parquet` format over `CSV`:
 | read performance | #TODO |   #TODO   |
 
 
-However, **--> EXPLAIN WHY WE CHOSE TO USE CSV FOR RENDERING MAPS <--**
+However, we used the `CSV` format for our final results: the analysis outputs a `CSV` file with the computed metrics, to be used by visualization. We used `CSV` for this part because it was enough for our needs: the final data is very small (a number for each country, i.e. ~200 rows) and thus we did not need the complexity of another format.
 
 > **3. What performance optimization(s) did you apply or would you apply with more time?**
 > 
