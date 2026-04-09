@@ -23,7 +23,7 @@ The dataset used for these studies is the Spotify Charts (All Audio Data) that i
 <img align="right" src="assets/spotify-logo.png" width="20%">
 
 - **Source** : Spotify Charts (All Audio Data) available at [`kaggle.com`](https://www.kaggle.com/datasets/sunnykakar/spotify-charts-all-audio-data)
-  - top 200 musics by region between 2017 and 2020 (given by Spotify)
+  - top 200 musics by region between 2017 and 2021 (given by Spotify)
   - enriched with metadata (from Spotify API)
 - **Format** : `CSV`
 - **Size** : ~27 Go
@@ -100,6 +100,39 @@ This part is written in Python (because of its rich ecosystem of visualization m
 ## Results
 
 <!-- key findings, presented with tables or charts. -->
+
+### Musical Trends
+> How do musical trends vary over the years? 
+
+We decided to highlight the variation of musical trends over the years through world-maps colored in shades of blue (all data have been normalized, hence colors are relative).
+
+TODO analyze result 
+
+<figure>
+    <img alt="" src="assets/gif/af_danceability.gif" width="48%" />
+    <img alt="" src="assets/gif/af_energy.gif" width="48%" />
+    <figcaption>Correlation between danceability and energy in musical trends</figcaption>
+</figure>
+
+We also figured out that musical trends tend to be impacted by external causes. As we could see in the following images, musics' positiveness increases in 2019-2020 meanwhile liveness drops due to Covid-19.
+
+<figure>
+    <img src="assets/gif/af_valence.gif" width="45%" />
+    <img src="assets/gif/af_liveness.gif" width="45%" /> 
+    <figcaption>Impact of the Covid-19 on liveness and valence of song</figcaption>
+</figure>
+
+
+### Countries clustering
+> Can countries be clustered by similar music tastes?
+
+TODO analyze result + show image
+
+
+### Musical success characteristics
+> Which musical characteristics (tempo, energy, etc.) give the best chances of success?
+
+TODO analyze result 
 
 
 ## How to run
