@@ -139,7 +139,52 @@ TODO analyze result
 
 <!-- step-by-step instructions to reproduce your pipeline. -->
 
+### Dataset retrieving and cleaning
+
+First, get the dataset from Kaggle [here](https://www.kaggle.com/datasets/sunnykakar/spotify-charts-all-audio-data) and put it in a folder in [`data/`](./data/) (for instance, `data/input/`).
+After unzipping it, we need to fix the first line (CSV header) because the first field is missing:
+
+```bash
+cd data/input
+unzip archive.zip
+sed -i '1 s/^,title,rank,date/id,title,rank,date/' merged_data.csv
+```
+
+TODO COUNTRY CSV
+
+### Backend building
+
+Then, build the Java backend using Maven: 
+
+```bash
+cd bigdata-back
+mvn package
+```
+
+This should create a `JAR` file under `target/bigdata-back-1.0-SNAPSHOT.jar`.
+
+### Convert dataset
+
+We need to convert the dataset from `CSV` to `Parquet`, using the previously built `JAR`:
+
+```bash
+cd bigdata-back
+# will create a parquet file in ../data/input
+java -cp target/bigdata-back-1.0-SNAPSHOT.jar fr.ensta.bigdata.utils.CsvToParquet ../data/input/merged_data.csv ../data/input/all-data.parquet
+```
+
+### Perform computations
+
+Finally, we just need to launch the main class to perform the computations needed to answer the questions.
+
+```bash
+java -cp target/bigdata-back-1.0-SNAPSHOT.jar fr.ensta.bigdata.Main ../data/input/all-data.parquet ../data/generated
+```
+
+### Generate visualization
+
+TODO RUN PYTHON
 
 ## Dependencies
 
-<!-- list of all required software and libraries with versions -->
+<!-- list of all required software and libraries with versions -->^
