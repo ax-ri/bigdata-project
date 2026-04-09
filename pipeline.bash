@@ -3,6 +3,8 @@
 # set -x
 set -e
 
+# rm -rf generated && mkdir generated
+
 # move the csv in sub-folders to csv files
 cd data/generated
 for dir in ./*; do
@@ -12,9 +14,10 @@ for dir in ./*; do
         rm -r "$dir"
     fi
 done
-mkdir success
-mv success-*.csv success/
+mkdir map plot
+# mv map-*.csv map/
+mv plot-*.csv plot/
 cd ../..
 
 cd bigdata-front
-uv run map-renderer.py ../data/generated/ ../data/output --clean
+# uv run main.py ../data/generated/ ../data/output --clean
