@@ -17,14 +17,13 @@ class SuccessPlotRenderer(DirRenderer):
 
         fig = px.line(
             data,
-            x="criteria",
+            x=criteria,
             y="streams",
             title=f"{self._FIELDS_PRETTY_NAMES[criteria]} success",
             labels={
-                "criteria": self._FIELDS_PRETTY_NAMES[criteria],
+                criteria: self._FIELDS_PRETTY_NAMES[criteria],
                 "streams": self._FIELDS_PRETTY_NAMES["streams"],
             },
         )
-        # fig.update_yaxes(range=self._FIELDS_VALUE_RANGES[criteria])
 
         return fig
