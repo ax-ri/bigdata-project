@@ -93,9 +93,15 @@ This part is written in Java, using the Spark framework. It handles:
 - the conversion of the dataset from `CSV` to `Parquet`;
 - the various computations needed to answer the questions.
 
+TODO some words about the techniques used
+
 ### Data visualization ([`front`](./bigdata-front/))
 
 This part is written in Python (because of its rich ecosystem of visualization modules), and produces maps and charts to create a visual representation of the answers.
+
+Map visualizations are created using choropleth maps, with an appropriate color scale. 
+
+Plot visualizations are made using bar plots with error bars to represent the confidence intervals.
 
 ## Results
 
@@ -139,22 +145,41 @@ TODO analyze result
 
 <!-- step-by-step instructions to reproduce your pipeline. -->
 
-### Dataset retrieving and cleaning
+We provide two ways of reproducing our pipeline: an automatic way (using Docker containers) and a manual way.
 
-First, get the dataset from Kaggle [here](https://www.kaggle.com/datasets/sunnykakar/spotify-charts-all-audio-data) and put it in a folder in [`data/`](./data/) (for instance, `data/input/`).
-After unzipping it, we need to fix the first line (CSV header) because the first field is missing:
+### Get the datasets
+
+Before starting, be sure to download the dataset from Kaggle [here](https://www.kaggle.com/datasets/sunnykakar/spotify-charts-all-audio-data) and put it in the folder [`data/input`](./data/input).
 
 ```bash
-cd data/input
+mv path-to-downloaded-archive.zip data/input
+cd data/input 
 unzip archive.zip
+rm archive.zip
+```
+#### Cleaning
+
+We need to fix the first line (CSV header) of the dataset because the first field is missing:
+
+```bash
 sed -i '1 s/^,title,rank,date/id,title,rank,date/' merged_data.csv
 ```
 
-TODO COUNTRY CSV
+#### Note
 
-### Backend building
+Note: We also need another small dataset containing country ISO codes (used to render the map visualizations). For this, we used [this dataset](https://www.kaggle.com/datasets/wbdill/country-codes-iso-3166), also from Kaggle. For convenience, and because this dataset is very small, we provide it directly in this repository (file [`data/input/countries_iso.csv`](data/input/countries_iso.csv))
 
-Then, build the Java backend using Maven: 
+### Containerized setup (Docker)
+
+To run the pipeline using Docker, you can just use the [`pipeline.bash`](./pipeline.bash) script.
+
+### Manual setup
+
+If for some reason you cannot use Docker, here are the steps to manually reproduce the pipeline. Be sure to install the required dependencies listed in the next section.
+
+#### Backend building
+
+First, build the Java backend using Maven: 
 
 ```bash
 cd bigdata-back
@@ -163,9 +188,9 @@ mvn package
 
 This should create a `JAR` file under `target/bigdata-back-1.0-SNAPSHOT.jar`.
 
-### Convert dataset
+#### Convert dataset
 
-We need to convert the dataset from `CSV` to `Parquet`, using the previously built `JAR`:
+Then, we need to convert the dataset from `CSV` to `Parquet`, using the previously built `JAR`:
 
 ```bash
 cd bigdata-back
@@ -173,18 +198,33 @@ cd bigdata-back
 java -cp target/bigdata-back-1.0-SNAPSHOT.jar fr.ensta.bigdata.utils.CsvToParquet ../data/input/merged_data.csv ../data/input/all-data.parquet
 ```
 
-### Perform computations
+#### Perform computations
 
 Finally, we just need to launch the main class to perform the computations needed to answer the questions.
 
 ```bash
-java -cp target/bigdata-back-1.0-SNAPSHOT.jar fr.ensta.bigdata.Main ../data/input/all-data.parquet ../data/generated
+java -cp target/bigdata-back-1.0-SNAPSHOT.jar fr.ensta.bigdata.Main ../data/input/all-data.parquet  ../data/input/countries_iso.csv ../data/generated
 ```
 
-### Generate visualization
+#### Generate visualization
 
-TODO RUN PYTHON
+We need to install the frontend dependencies using `uv`. Then, we just have to run the main script to create the visualizations.
+
+```bash
+cd bigdata-front
+uv sync
+uv run main.py ../data/generated ../data/output
+```
+
+The visualizations are available in the `data/output` folder.
 
 ## Dependencies
 
-<!-- list of all required software and libraries with versions -->^
+If you are using the Docker setup, you just need to install Docker on your machine.
+
+To use the manual setup, you need the following dependencies:
+- Java (version 11)
+- Maven (version 3.9.14)
+- Python (version 3+)
+- [`uv`](https://docs.astral.sh/uv/getting-started/installation/)
+- Note: the Python module `plotly` internally uses Google Chrome to render the plots, so you need to [install it](https://www.google.com/chrome) on your machine.
