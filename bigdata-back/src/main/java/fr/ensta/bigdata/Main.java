@@ -109,12 +109,6 @@ public final class Main {
             System.out.println("[test]");
         }
 
-        for (String criteria : new String[]{"duration_ms", "af_danceability", "af_energy", "af_key", "af_loudness", "af_speechiness", "af_acousticness", "af_liveness", "af_valence", "af_tempo"}) {
-            // Create dataset for criteria over stream
-            Dataset<Row> ds = successAgg.aggregate(baseDs, criteria);
-            writeDatasetAsCsv(ds, Path.of(outputDir, "success-" + criteria).toString());
-        }
-
         spark.stop();
     }
 }
