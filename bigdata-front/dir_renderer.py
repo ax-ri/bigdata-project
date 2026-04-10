@@ -54,6 +54,7 @@ class DirRenderer(ABC):
         "af_valence": [0, 1],
         "af_tempo": [0, 240],
         "af_time_signature": [0, 5],
+        "duration_ms": [0, 600_000],
     }
 
     def __init__(self, output_path: str):
