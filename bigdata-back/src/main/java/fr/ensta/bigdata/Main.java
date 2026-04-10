@@ -69,7 +69,7 @@ public final class Main {
             for (String criteria : new String[]{"duration_ms", "af_danceability", "af_energy", "af_key", "af_loudness", "af_speechiness", "af_acousticness", "af_liveness", "af_valence", "af_tempo"}) {
                 Dataset<Row> ds = criteriaAgg.aggregate(yearDS, criteria, 100);
                 ds = joiner.join(ds, "region");
-                writeDatasetAsCsv(ds, Path.of(outputDir, "tmp-" + criteria + "-" + year).toString());
+                writeDatasetAsCsv(ds, Path.of(outputDir, "af_map-" + criteria + "-" + year).toString());
             }
             // Cleanup
             yearDS.unpersist();
