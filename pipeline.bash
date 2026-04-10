@@ -1,13 +1,12 @@
 #!/bin/bash
 
-# set -x
 set -e
 
 # cleanup
-# rm -rf generated && mkdir generated
+cd data
+rm -rf generated output && mkdir generated output
+cd ..
 
-# create building container
-docker build . -t bigdata-builder
 # run computations
 docker run -it --rm --user 1000:1000 \
     -v "$(pwd)":/project \
@@ -20,18 +19,7 @@ docker run -it --rm --user 1000:1000 \
     '
 
 # move the csv in sub-folders to csv files
-cd data/generated
-for dir in ./*; do
-    if [ -d "$dir" ]; then
-        b=$(basename "$dir")
-        mv "$dir/"*.csv "$b.csv"
-        rm -r "$dir"
-    fi
-done
-mkdir map plot
-# mv map-*.csv map/
-mv plot-*.csv plot/
-cd ../..
+./scripts/flatten-generated.bash
 
 # generate visualization
 docker run -it --rm \
@@ -45,3 +33,8 @@ docker run -it --rm \
         uv run main.py /project/data/generated /project/data/output --clean && \
         chown -R 1000:1000 /project/data
     '
+
+# generate gif for feature maps
+cwd="$(pwd)/data/output"
+ffmpeg_cmd="docker run -it --rm --user 1000:1000 -v ""$cwd"":""$cwd"" -w ""$cwd"" jrottenberg/ffmpeg"
+./scripts/generate-gif.bash "$ffmpeg_cmd"

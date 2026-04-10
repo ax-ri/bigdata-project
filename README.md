@@ -173,6 +173,10 @@ Note: We also need another small dataset containing country ISO codes (used to r
 
 To run the pipeline using Docker, you can just use the [`pipeline.bash`](./pipeline.bash) script.
 
+```bash
+./pipeline.bash
+```
+
 ### Manual setup
 
 If for some reason you cannot use Docker, here are the steps to manually reproduce the pipeline. Be sure to install the required dependencies listed in the next section.
@@ -206,6 +210,14 @@ Finally, we just need to launch the main class to perform the computations neede
 java -cp target/bigdata-back-1.0-SNAPSHOT.jar fr.ensta.bigdata.Main ../data/input/all-data.parquet  ../data/input/countries_iso.csv ../data/generated
 ```
 
+#### Reorganize generated data
+
+We need to reorganize the generated data before generating the visualization, using the appropriate script.
+
+```bash
+./scripts/flatten-generated.bash
+```
+
 #### Generate visualization
 
 We need to install the frontend dependencies using `uv`. Then, we just have to run the main script to create the visualizations.
@@ -214,6 +226,13 @@ We need to install the frontend dependencies using `uv`. Then, we just have to r
 cd bigdata-front
 uv sync
 uv run main.py ../data/generated ../data/output
+```
+
+We also need to generate GIF images for one of the visualization.
+
+```bash
+cwd="$(pwd)/data/output"
+./scripts/generate-gif.bash ffmpeg
 ```
 
 The visualizations are available in the `data/output` folder.
@@ -227,4 +246,5 @@ To use the manual setup, you need the following dependencies:
 - Maven (version 3.9.14)
 - Python (version 3+)
 - [`uv`](https://docs.astral.sh/uv/getting-started/installation/)
+- `ffmpeg`
 - Note: the Python module `plotly` internally uses Google Chrome to render the plots, so you need to [install it](https://www.google.com/chrome) on your machine.
