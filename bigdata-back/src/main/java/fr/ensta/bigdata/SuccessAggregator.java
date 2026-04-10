@@ -2,9 +2,7 @@ package fr.ensta.bigdata;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.apache.spark.sql.functions;
 
 import static org.apache.spark.sql.functions.col;
 
@@ -17,17 +15,12 @@ public class SuccessAggregator {
      * @return dataset containing streams vs average criteria
      */
     public Dataset<Row> aggregate(Dataset<Row> ds, String criteria) {
-        Map<String, String> hash = new HashMap<>();
-        hash.put("streams", "sum");
-        hash.put(criteria, "avg");
         return ds
-                .cache()
-                .select("title", "streams", criteria)
-                .groupBy("title").agg(hash)
-                .withColumnRenamed("sum(streams)", "total")
-                .withColumnRenamed("avg(" + criteria + ")", "metrics")
-                .select("total", "metrics")
-                .filter(col("total").notEqual(0))
-                .orderBy("total");
+                .select(col("streams"), col(criteria))
+                .groupBy(criteria)
+                .agg(
+                        functions.sum("streams").alias("streams")
+                )
+                .orderBy(criteria);
     }
 }

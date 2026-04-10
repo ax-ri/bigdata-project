@@ -12,16 +12,16 @@ public class CriteriaAggregator {
      * Calculate the most popular 'genre' in each region (for the given year).
      *
      * @param criteria  criteria from which the 'genre' is defined
-     * @param year      given year
      * @param songCount number of most popular song to consider
      * @return final dataset
      */
-    public Dataset<Row> aggregate(Dataset<Row> baseDs, String criteria, int year, int songCount) {
+    public Dataset<Row> aggregate(Dataset<Row> baseDs, String criteria, int songCount) {
         return Utils.normalizeValue(
-                Utils.getTopNSongs(baseDs, criteria, songCount, year)
-                        .groupBy("region").avg(criteria)
-                        .withColumnRenamed("avg(" + criteria + ")", "metric"),
-                "metric"
+                Utils.getTopNSongs(baseDs, criteria, songCount)
+                        .groupBy("region")
+                        .avg(criteria)
+                        .withColumnRenamed("avg(" + criteria + ")", "criteria"),
+                "criteria"
         );
     }
 }

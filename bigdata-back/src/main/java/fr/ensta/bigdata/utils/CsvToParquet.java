@@ -66,6 +66,7 @@ public class CsvToParquet {
                 )
                 // convert null values to 0
                 .na().fill(0)
+                .filter(col("streams").notEqual(0))
                 // write data in parquet format
                 .write()
                 .mode("overwrite")

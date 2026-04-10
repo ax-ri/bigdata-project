@@ -1,39 +1,30 @@
 package fr.ensta.bigdata;
 
-import fr.ensta.bigdata.utils.Clustering;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.expressions.Window;
+import org.apache.spark.sql.expressions.WindowSpec;
 import org.apache.spark.sql.functions;
 
 import static org.apache.spark.sql.functions.*;
 
 public class SuccessStats {
+    public Dataset<Row> aggregator(Dataset<Row> joinDs, String criteria, int year, int songCount) {
+        WindowSpec w = Window
+                .partitionBy(criteria)
+                .orderBy(col("streams").desc());
 
-    Clustering clustering = new Clustering();
 
-
-    public Dataset<Row> aggregator(Dataset<Row> baseDs, String criteria, int year, int nbClusters, int songCount) {
-        Dataset<Row> clusteredDs = clustering.cluster(baseDs, nbClusters);
-
-        // Assert songCount is smaller than the number of songs in each clusters
-        long songsByCluster = clusteredDs.groupBy("prediction").count().select(min("count")).first().getLong(0);
-        if (songCount > songsByCluster) {
-            songCount = (int) songsByCluster - 1;
-        }
-
-        Dataset<Row> pureDS = baseDs
-                .select("id", "streams", "date", criteria);
-        Dataset<Row> statsDs = clusteredDs
-                .join(pureDS, array_contains(clusteredDs.col("ids"), pureDS.col("id")))
-                .select("prediction", "streams", "date", criteria)
-                .filter("YEAR(date)=" + year)
+        Dataset<Row> statsDs = joinDs
+                .select("prediction", "streams", "year", criteria)
+                .filter(col("year").equalTo(year))
                 .groupBy("prediction")
                 .agg(
                         functions.sum("streams").alias("streams"),
                         functions.avg(criteria).alias(criteria)
                 )
-                .orderBy(col("streams").desc())
-                .limit(songCount)
+                .withColumn("rank", row_number().over(w))
+                .filter(col("rank").leq(songCount))
                 .agg(
                         functions.median(col(criteria)).alias("mean"),
                         functions.stddev(col(criteria)).alias("stddev")

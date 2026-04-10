@@ -4,6 +4,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.expressions.Window;
 import org.apache.spark.sql.expressions.WindowSpec;
+import org.apache.spark.sql.functions;
 
 import static org.apache.spark.sql.functions.*;
 
@@ -23,14 +24,15 @@ public class Utils {
         return ds.withColumn(criteria, col(criteria).minus(min).divide(n));
     }
 
-    public static Dataset<Row> getTopNSongs(Dataset<Row> baseDs, String column, int songCount, int year) {
-        WindowSpec w = Window.partitionBy("region").orderBy(desc("streams"));
+    public static Dataset<Row> getTopNSongs(Dataset<Row> ds, String column, int songCount) {
+        // Prepare window
+        WindowSpec w = Window
+                .partitionBy("region")
+                .orderBy(desc("streams"));
 
-        return baseDs
-                .filter("YEAR(date) = '" + year + "'")
-                .cache()
-                .select(column, "region", "streams")
-                .withColumn("rank", dense_rank().over(w))
+        return ds
+                .select(col(column), col("region"), col("streams"))
+                .withColumn("rank", functions.row_number().over(w))
                 .filter(col("rank").$less$eq(songCount));
     }
 }
