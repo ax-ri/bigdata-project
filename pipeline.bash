@@ -38,3 +38,6 @@ docker run -it --rm \
 cwd="$(pwd)/data/output"
 ffmpeg_cmd="docker run -it --rm --user 1000:1000 -v ""$cwd"":""$cwd"" -w ""$cwd"" jrottenberg/ffmpeg"
 ./scripts/generate-gif.bash "$ffmpeg_cmd"
+
+echo "--------------------------------------------------------------------------------------------"
+echo "Pipeline finished successfully. Result are available in the data/output folder."
