@@ -28,9 +28,9 @@ The dataset used for these studies is the Spotify Charts (All Audio Data) that i
 - **Format** : `CSV`
 - **Size** : ~27 Go
 - **Schema**: The dataset contains 29 columns that can be divided into three groups:
-  - characteristics to identify a song (eg. *title*, *artist*)
+  - characteristics to identify a song (e.g. *title*, *artist*)
   - characteristics to measure its impact on a region (eg. *streams*, *region*)
-  - characteristics to describe a song (eg. audio features as *af_energy*)
+  - characteristics to describe a song (e.g. audio features as *af_energy*)
 
 
   <details>
@@ -91,9 +91,15 @@ These parts are respectively nicknamed _back_ and _font_ (like the back-end and 
 
 This part is written in Java, using the Spark framework. It handles:
 - the conversion of the dataset from `CSV` to `Parquet`;
-- the various computations needed to answer the questions.
-
-TODO some words about the techniques used
+- the various computations needed to answer the questions
+  - `countryByCriteria`: computes the average value of a given musical criterion (e.g., energy, danceability) for the top 50 most streamed songs in each country for a given year \
+  **Objective**: identify how musical characteristics evolve across countries and over time;
+  - `countryByPrediction`: generalizes the previous steps by using clustering on songs (and recreate the idea of a genre) and assigning each region to its most streamed cluster \
+  **Objective**: group countries according to similar listening patterns;
+  - `criteriaBySuccess`: analyzes the relationship between a musical feature and a song’s popularity by computing the average value of a given criterion and its total number of streams \
+  **Objective**: understand how specific audio features influence success;
+  - `hitsCharacteristics` : focuses on identifying the typical characteristics of highly successful songs by using songs clustering and statistical measures \
+  **Objective**: identify the typical feature values of successful songs. 
 
 ### Data visualization ([`front`](./bigdata-front/))
 
