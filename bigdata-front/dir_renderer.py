@@ -68,7 +68,7 @@ class DirRenderer(ABC):
             logging.info("Processing %s", entry.path)
             fig = self._render(entry)
             fig.update_layout(
-                margin=dict(l=0, r=0, t=50, b=0),
+                margin=dict(l=10, r=10, t=50, b=0),
             )
             output_filepath = os.path.join(
                 self._output_path, os.path.basename(entry.path).split(".")[0] + ".png"

@@ -7,7 +7,7 @@ import plotly.express as px
 from dir_renderer import DirRenderer
 
 
-class PlotRenderer(DirRenderer):
+class AfPlotRenderer(DirRenderer):
 
     def _render(self, entry: os.DirEntry[str]) -> go.Figure:
         data = pd.read_csv(entry.path)
