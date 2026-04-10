@@ -27,7 +27,7 @@ class DirRenderer(ABC):
         "explicit": "Explicit content",
         "release_date": "Release date",
         "available_markets": "Available markets",
-        "af_danceability": "Dancability",
+        "af_danceability": "Danceability",
         "af_energy": "Energy",
         "af_key": "Key",
         "af_loudness": "Loudness",
