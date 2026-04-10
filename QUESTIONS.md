@@ -2,7 +2,11 @@
 
 > **1. What distributed computing principle(s) did your project rely on? Explain how your workload is split and parallelized across a cluster (e.g., partitioning strategy, shuffle operations).**
 
-ANSWER 
+The processing done in our project relied primarily on computing principles such as data partitioning and shuffle-based aggregation, as implemented in Apache Spark.
+
+The columnar nature of the Parquet format we used improved efficiency by allowing Spark to read only the necessary columns for our aggregations.
+
+Also, Spark's lazy evaluation model allowed it to build a logical execution plan (DAG) before running the job. This helped optimize execution by minimizing unnecessary data movement and combining operations when possible.
 
 > **2. How did you choose your storage format and why? Discuss trade-offs between formats you considered (e.g., CSV vs Parquet vs Avro) in terms of schema evolution, compression, and read performance.**
 
@@ -42,4 +46,6 @@ If it were 100x larger, it would likely break because of:
 
 > **5. What was the most valuable thing you learned in this course, and how did it influence your project?**
 
-ANSWER
+We appreciated having a wide view of different data processing tools and frameworks (for instance, understanding how distributed processing frameworks handle task scheduling and data partitioning helped us better structure our pipeline).
+
+We especially appreciated learning how they work behind the scenes. In our project, it proved valuable when debugging and improving performance, as we could reason about what was happening internally instead of treating tools as "black boxes." Also, this comprehension allowed us to precisely think about the techniques we used in our project, and gave us the keys to understand some new concepts we came across our researches.
