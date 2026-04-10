@@ -111,26 +111,28 @@ Plot visualizations are made using bar plots with error bars to represent the co
 
 ## Results
 
+Once the pipeline has been run, the results are available in the `data/output` folder.
+
 <!-- key findings, presented with tables or charts. -->
 
 ### Musical Trends
 > How do musical trends vary over the years? 
 
-We decided to highlight the variation of musical trends over the years through world-maps colored in shades of blue (all data have been normalized, hence colors are relative).
+We decided to highlight the variation of musical trends over the years through world-maps colored in color shades (all data have been normalized, hence colors are relative).
 
-TODO analyze result 
+We can see that some audio features are preferred in certain region of the world, for instance _danceability_ and _energy_ are preferred is South America.
 
 <figure>
-    <img alt="" src="assets/gif/af_danceability.gif" width="48%" />
-    <img alt="" src="assets/gif/af_energy.gif" width="48%" />
+    <img alt="" src="assets/results/af_map/af_danceability.gif" width="48%" />
+    <img alt="" src="assets/results/af_map/af_energy.gif" width="48%" />
     <figcaption>Correlation between danceability and energy in musical trends</figcaption>
 </figure>
 
-We also figured out that musical trends tend to be impacted by external causes. As we could see in the following images, musics' positiveness increases in 2019-2020 meanwhile liveness drops due to Covid-19.
+We also figured out that musical trends tend to be impacted by external causes. As we could see in the following images, musics' positiveness increases in 2019-2020 meanwhile liveness drops, probably due to Covid-19.
 
 <figure>
-    <img src="assets/gif/af_valence.gif" width="45%" />
-    <img src="assets/gif/af_liveness.gif" width="45%" /> 
+    <img src="assets/results/af_map/af_valence.gif" width="45%" />
+    <img src="assets/results/af_map/af_liveness.gif" width="45%" /> 
     <figcaption>Impact of the Covid-19 on liveness and valence of song</figcaption>
 </figure>
 
@@ -138,14 +140,38 @@ We also figured out that musical trends tend to be impacted by external causes. 
 ### Countries clustering
 > Can countries be clustered by similar music tastes?
 
-TODO analyze result + show image
+Here, we can see that some countries keep similar music taste over the years, for instance the United States and Canada, or Spain and Latin America. These similar tastes are often correlated with geographic proximity.
+
+<figure>
+    <img src="assets/results/cluster_map/cluster_map-2017.png" width="30%" />
+    <img src="assets/results/cluster_map/cluster_map-2019.png" width="30%" />
+    <img src="assets/results/cluster_map/cluster_map-2021.png" width="30%" /> 
+    <figcaption>Countries with similar music tastes (arbitrary colors)</figcaption>
+</figure>
 
 
 ### Musical success characteristics
 > Which musical characteristics (tempo, energy, etc.) give the best chances of success?
 
-TODO analyze result 
+We see here that some musical characteristics are prevalent in audio tracks success. For instance, there exist a clearly optimal duration and key for the most listened musics. Some other features, like tempo or _speechiness_, seem to have two optimum instead of one.
 
+<figure>
+    <img src="assets/results/success_plot/success_plot-af_key.png" width="45%" />
+    <img src="assets/results/success_plot/success_plot-duration_ms.png" width="45%" />
+    <br />
+    <img src="assets/results/success_plot/success_plot-af_speechiness.png" width="45%" /> 
+    <img src="assets/results/success_plot/success_plot-af_tempo.png" width="45%" /> 
+    <figcaption>Music success according to the value of an audio feature</figcaption>
+</figure>
+
+Interestingly enough, these optimal characteristics stay the same over the years.
+
+<figure>
+    <img src="assets/results/af_plot/af_plot-af_key.png" width="30%" />
+    <img src="assets/results/af_plot/af_plot-af_speechiness.png" width="30%" />
+    <img src="assets/results/af_plot/af_plot-duration_ms.png" width="30%" /> 
+    <figcaption>Optimal audio features stay the same over the years</figcaption>
+</figure>
 
 ## How to run
 
@@ -254,3 +280,7 @@ To use the manual setup, you need the following dependencies:
 - [`uv`](https://docs.astral.sh/uv/getting-started/installation/)
 - `ffmpeg`
 - Note: the Python module `plotly` internally uses Google Chrome to render the plots, so you need to [install it](https://www.google.com/chrome) on your machine.
+
+## Credits 
+
+Elfie Molina--Bonnefoy and Axel Richard
